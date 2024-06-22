@@ -1,0 +1,38 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - ASBEE</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="header">
+        <a href="index.html">ASBEE (Back to Home Link)</a>
+    </div>
+    <div class="logo">
+        <img src="logo.png" alt="ASBEE Logo">
+    </div>
+    <div class="nav">
+        <a href="index.html#about">ABOUT</a>
+        <a href="index.html#services">SERVICES</a>
+        <a href="index.html#careers">CAREERS</a>
+        <a href="contact.html">CONTACT</a>
+    </div>
+    <div id="content">
+        <div id="contact" class="section active">
+            <h2>Contact Us</h2>
+            <p>Email: <a href="mailto:info@asbee.in">info@asbee.in</a></p>
+            <form action="mailto:info@asbee.in" method="post" enctype="text/plain">
+                <label for="email">E-mail:</label><br>
+                <input type="email" id="email" name="email"><br><br>
+                <label for="subject">Subject:</label><br>
+                <input type="text" id="subject" name="subject"><br><br>
+                <label for="query">Query:</label><br>
+                <textarea id="query" name="query" rows="4" cols="50"></textarea><br><br>
+                <input type="submit" value="Send">
+            </form>
+        </div>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>
