@@ -1,98 +1,78 @@
-/* General Styles */
 body {
+    font-family: 'Century Gothic', sans-serif;
     margin: 0;
     padding: 0;
-    font-family: "Century Gothic", sans-serif;
-    background-color: #ffffff;
-    color: #000000;
-    line-height: 1.6;
+    background-color: white;
 }
 
-a {
-    color: #000;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-img {
-    max-width: 100%;
-    height: auto;
-}
-
-/* Header Section */
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
-    margin: 0 10%;
+    padding: 20px 10%;
+    background-color: white;
 }
 
 .logo {
-    max-width: 120px;
+    width: 150px;
 }
 
 .nav-link {
-    font-size: 16px;
-    font-weight: bold;
+    margin-left: 20px;
+    text-decoration: none;
+    color: black;
 }
 
-/* Main Content Section */
-main {
-    margin: 0 10%; /* Align content with header margin */
-}
-
-/* Adjusted for left alignment with logo */
 .intro {
     text-align: left;
-    margin-top: 100px; /* Adjust top margin to position text in the middle of the page */
+    margin: 40px 10%;
 }
 
 .intro h1 {
-    font-size: 2.5rem; /* Large font size */
-    margin-bottom: 10px; /* Reduced vertical spacing between lines */
-    font-weight: normal;
-    line-height: 1.2; /* Tighter vertical line spacing */
+    font-size: 2.5em;
 }
 
 .intro p {
-    display: inline;
-    line-height: 1.2; /* Reduced line spacing */
+    font-size: 1.2em;
 }
 
 .intro a {
-    font-size: 2.5rem; /* Same font size as h1 */
-    font-weight: bold;
-    color: #556B2F; /* Olive green color */
-    display: inline;
+    color: olive; /* Olive green for the hyperlink */
+    text-decoration: none;
 }
 
-.intro a:hover {
-    color: #6B8E23; /* Lighter olive green on hover */
-}
-
-/* Navigation Links */
 .nav-links {
-    margin: 40px 0;
-    font-size: 1.25rem;
+    display: flex;
+    justify-content: left;
+    margin: 20px 10%;
 }
 
 .nav-links a {
-    font-weight: bold;
-    margin: 0 15px;
+    margin-right: 20px;
+    text-decoration: none;
+    color: black;
 }
 
-/* Image Section */
 .image-section {
-    margin: 60px 0;
+    margin: 60px 10%;
+    display: flex;
+    justify-content: space-between;
 }
 
 .main-image {
-    max-width: 80%;
+    width: 30%;
     height: auto;
     display: block;
-    margin: 0 auto;
 }
+
+.section {
+    border-top: 1px solid #ccc;
+    padding: 40px 0;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #
+
+       
