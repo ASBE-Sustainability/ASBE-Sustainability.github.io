@@ -1,59 +1,37 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASBEE</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .header {
-            text-align: center;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-        .header a {
-            text-decoration: none;
-            color: #333;
-        }
-        .logo {
-            text-align: center;
-            margin: 20px 0;
-        }
-        .logo img {
-            max-width: 100%;
-            height: auto;
-        }
-        .nav {
-            display: flex;
-            justify-content: center;
-            background-color: #333;
-        }
-        .nav a {
-            color: white;
-            padding: 14px 20px;
-            text-decoration: none;
-            text-align: center;
-        }
-        .nav a:hover {
-            background-color: #575757;
-        }
-    </style>
+    <title>ASBEE - Home</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="header">
-        <a href="index.html">Advocates for Sustainable Built Environment and Energy-Efficiency</a>
-    </div>
-    <div class="logo">
-        <img src="logo.png" alt="ASBEE Logo">
-    </div>
-    <div class="nav">
-        <a href="about">ABOUT</a>
-        <a href="services">SERVICES</a>
-        <a href="careers">CAREERS</a>
-        <a href="contact">CONTACT</a>
-    </div>
+    <header class="header">
+        <a href="index.html"><img src="logo.jpg" alt="ASBEE Logo" class="logo"></a>
+        <nav>
+            <a href="contact.html" class="nav-link">Contact Us</a>
+        </nav>
+    </header>
+
+    <main id="home">
+        <div class="intro">
+            <h1>Welcome to ASBEE</h1>
+            <p>We want to help you make our earth greener, our air cleaner, our water clearer and our buildings better. <a href="services.html">How can ASBEE help you?</a></p>
+        </div>
+        <div class="nav-links">
+            <a href="about.html">About Us</a>
+            <a href="services.html">What we do?</a>
+            <a href="work.html">Work With us?</a>
+            <a href="contact.html">Get in touch</a>
+        </div>
+        <div class="image-section">
+            <img src="career.jpeg" alt="Career Image" class="main-image">
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 ASBEE. All rights reserved.</p>
+    </footer>
 </body>
 </html>
