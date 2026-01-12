@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASBEE - Advocates for Sustainable Built Environment and Energy Efficiency</title>
+  
+  <!-- React & ReactDOM (Development version) -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  
+  <!-- Babel for JSX compilation -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Styles -->
+  <style>
+    :root {
+      /* Brand Colors */
+      --color-primary: #1A4D2E;      /* Deep Forest Green */
+      --color-primary-light: #4F8A64; /* Sage Green */
+      --color-accent: #E8F5E9;       /* Pale Mint Background */
+      --color-highlight: #FF9F1C;    /* Solar Orange */
+      
+      /* Neutral Colors */
+      --color-text-main: #2D3436;
+      --color-text-light: #636E72;
+      --color-white: #ffffff;
+      --color-off-white: #F9F9F9;
+      --color-footer: #111e15;
+
+      /* Spacing & Layout */
+      --container-width: 1200px;
+      --header-height: 80px;
+      --border-radius: 12px;
+      --box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    /* Reset & Base */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    html { scroll-behavior: smooth; }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--color-text-main);
+      background-color: var(--color-white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4 {
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--color-primary);
+    }
+
+    a { text-decoration: none; color: inherit; transition: color 0.2s; }
+    ul { list-style: none; }
+    
+    /* Utilities */
+    .container {
+      max-width: var(--container-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section-padding { padding: 100px 0; }
+    
+    .text-center { text-align: center; }
+    
+    .section-header {
+      margin-bottom: 60px;
+      text-align: center;
+    }
+    
+    .section-tag {
+      display: inline-block;
+      background: var(--color-accent);
+      color: var(--color-primary);
+      padding: 6px 16px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+    }
+
+    .section-desc {
+      font-size: 1.125rem;
+      color: var(--color-text-light);
+      max-width: 600px;
+      margin: 0 auto;
+      color: #555;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+      border: none;
+      font-size: 1rem;
+    }
+
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: var(--color-white);
+    }
+
+    .btn-primary:hover {
+      background-color: #143d24;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(26, 77, 46, 0.3);
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      border: 2px solid var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    .btn-outline:hover {
+      background-color: var(--color-primary);
+      color: var(--color-white);
+    }
+
+    /* Navigation */
+    .navbar {
+      height: var(--header-height);
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      width: 100%;
+    }
+
+    .navbar .container {
+      height: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      color: var(--color-primary);
+    }
+    
+    .logo img {
+      height: 50px; 
+      width: auto;
+      object-fit: contain;
+    }
+
+    .logo-icon {
+      color: var(--color-highlight);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .nav-item {
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: var(--color-text-main);
+    }
+
+    .nav-item:hover { color: var(--color-primary); }
+
+    /* Dropdown Logic */
+    .dropdown-container {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .dropdown-trigger {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-white);
+      min-width: 220px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      border-radius: 8px;
+      padding: 10px;
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      margin-top: 15px;
+      z-index: 1100;
+    }
+    
+    .dropdown-menu::before {
+      content: "";
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: 6px solid var(--color-white);
+    }
+
+    .dropdown-container:hover .dropdown-menu {
+      display: flex;
+    }
+
+    .dropdown-item {
+      padding: 10px 15px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      color: var(--color-text-main);
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .dropdown-item:hover {
+      background: var(--color-accent);
+      color: var(--color-primary);
+    }
+
+    .mobile-menu-btn { display: none; background: none; border: none; cursor: pointer; }
+
+    /* Hero Section */
+    .hero {
+      padding: 120px 0 160px;
+      background: radial-gradient(circle at top right, var(--color-accent) 0%, transparent 40%),
+                  radial-gradient(circle at bottom left, #fff8e1 0%, transparent 40%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 1.25rem;
+      color: var(--color-text-light);
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+
+    /* About Section */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .about-text p { margin-bottom: 20px; font-size: 1.05rem; }
+
+    .cards-container {
+      display: grid;
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--color-white);
+      padding: 30px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      border-left: 4px solid var(--color-primary);
+      transition: transform 0.3s;
+    }
+
+    .feature-card:hover { transform: translateX(10px); }
+    
+    .feature-card h3 { 
+      display: flex; 
+      align-items: center; 
+      gap: 12px; 
+      margin-bottom: 12px;
+      font-size: 1.25rem;
+    }
+
+    /* Services Section */
+    .services-bg {
+      background-color: var(--color-off-white);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 30px;
+    }
+
+    .service-card {
+      background: var(--color-white);
+      padding: 40px;
+      border-radius: var(--border-radius);
+      transition: all 0.3s ease;
+      border: 1px solid transparent;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .service-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--box-shadow);
+      border-color: var(--color-primary-light);
+    }
+
+    .icon-wrapper {
+      width: 64px;
+      height: 64px;
+      background: var(--color-accent);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-primary);
+      margin-bottom: 24px;
+    }
+
+    .service-card h3 { font-size: 1.5rem; margin-bottom: 16px; }
+    .service-card p { color: var(--color-text-light); margin-bottom: 24px; flex-grow: 1; }
+
+    .service-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+      color: var(--color-text-main);
+    }
+
+    .check-icon {
+      color: var(--color-primary-light);
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+
+    /* Tools Section */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .tool-card {
+      background: var(--color-white);
+      border: 1px solid #e0e0e0;
+      border-radius: var(--border-radius);
+      padding: 30px;
+      text-align: center;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .tool-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--box-shadow);
+      border-color: var(--color-primary);
+    }
+
+    .tool-icon {
+      color: var(--color-highlight);
+      margin-bottom: 20px;
+      background: var(--color-off-white);
+      padding: 15px;
+      border-radius: 50%;
+    }
+
+    .tool-title {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+      color: var(--color-primary);
+    }
+
+    .tool-desc {
+      color: var(--color-text-light);
+      margin-bottom: 25px;
+      font-size: 0.95rem;
+      flex-grow: 1;
+    }
+
+    /* Articles Section */
+    .articles-bg {
+      background-color: var(--color-off-white);
+    }
+
+    .articles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .article-card {
+      background: var(--color-white);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--box-shadow);
+      transition: transform 0.3s;
+      border: 1px solid #eee;
+    }
+
+    .article-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .article-image {
+      height: 200px;
+      background-color: var(--color-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-primary-light);
+    }
+
+    .article-content {
+      padding: 24px;
+    }
+
+    .article-tag {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: var(--color-primary);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .article-title {
+      font-size: 1.25rem;
+      margin-bottom: 12px;
+      color: var(--color-text-main);
+    }
+
+    .article-excerpt {
+      font-size: 0.95rem;
+      color: var(--color-text-light);
+      margin-bottom: 20px;
+    }
+
+    .article-link {
+      color: var(--color-primary);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+    }
+    
+    .article-link:hover { text-decoration: underline; }
+
+    /* Footer */
+    .footer {
+      background-color: var(--color-footer);
+      color: rgba(255,255,255,0.7);
+      padding: 80px 0 30px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 60px;
+      margin-bottom: 60px;
+    }
+
+    .footer-logo {
+      color: var(--color-white);
+      font-size: 1.8rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .footer-logo img {
+      height: 40px; 
+      width: auto;
+      margin-right: 12px;
+    }
+
+    .footer-heading {
+      color: var(--color-white);
+      font-size: 1.1rem;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .footer-links li { margin-bottom: 12px; }
+    .footer-links a:hover { color: var(--color-white); padding-left: 5px; }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-size: 0.9rem;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .section-title { font-size: 2rem; }
+      .hero-title { font-size: 2.5rem; }
+      
+      .navbar .nav-links {
+        display: none;
+        position: absolute;
+        top: var(--header-height);
+        left: 0;
+        width: 100%;
+        background: var(--color-white);
+        flex-direction: column;
+        padding: 24px;
+        gap: 20px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        text-align: center;
+      }
+      
+      .navbar .nav-links.open { display: flex; }
+      .mobile-menu-btn { display: block; }
+      
+      .about-grid, .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+      
+      /* Mobile Dropdown Logic */
+      .dropdown-container:hover .dropdown-menu {
+        position: static;
+        box-shadow: none;
+        background: rgba(0,0,0,0.02);
+        transform: none;
+        width: 100%;
+        display: flex;
+        padding: 0;
+        margin-top: 10px;
+      }
+      
+      .dropdown-menu::before { display: none; }
+      
+      .dropdown-trigger {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    /* --- ICONS (SVG replacements for Lucide) --- */
+    const IconBase = ({ children, size = 24, className = "", style = {} }) => (
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        width={size} 
+        height={size} 
+        viewBox="0 0 24 24" 
+        fill="none" 
+        stroke="currentColor" 
+        strokeWidth="2" 
+        strokeLinecap="round" 
+        strokeLinejoin="round" 
+        className={className}
+        style={style}
+      >
+        {children}
+      </svg>
+    );
+
+    const Leaf = (props) => (
+      <IconBase {...props}>
+        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+        <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
+      </IconBase>
+    );
+
+    const Wind = (props) => (
+      <IconBase {...props}>
+        <path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2" />
+        <path d="M9.6 4.6A2 2 0 1 1 11 8H2" />
+        <path d="M12.6 19.4A2 2 0 1 0 14 16H2" />
+      </IconBase>
+    );
+
+    const Sun = (props) => (
+      <IconBase {...props}>
+        <circle cx="12" cy="12" r="4" />
+        <path d="M12 2v2" />
+        <path d="M12 20v2" />
+        <path d="m4.93 4.93 1.41 1.41" />
+        <path d="m17.66 17.66 1.41 1.41" />
+        <path d="M2 12h2" />
+        <path d="M20 12h2" />
+        <path d="m6.34 17.66-1.41 1.41" />
+        <path d="m19.07 4.93-1.41 1.41" />
+      </IconBase>
+    );
+
+    const BarChart = (props) => (
+      <IconBase {...props}>
+        <line x1="12" x2="12" y1="20" y2="10" />
+        <line x1="18" x2="18" y1="20" y2="4" />
+        <line x1="6" x2="6" y1="20" y2="16" />
+      </IconBase>
+    );
+
+    const BookOpen = (props) => (
+      <IconBase {...props}>
+        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+      </IconBase>
+    );
+
+    const Mail = (props) => (
+      <IconBase {...props}>
+        <rect width="20" height="16" x="2" y="4" rx="2" />
+        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+      </IconBase>
+    );
+
+    const Globe = (props) => (
+      <IconBase {...props}>
+        <circle cx="12" cy="12" r="10" />
+        <line x1="2" x2="22" y1="12" y2="12" />
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+      </IconBase>
+    );
+
+    const Menu = (props) => (
+      <IconBase {...props}>
+        <line x1="4" x2="20" y1="12" y2="12" />
+        <line x1="4" x2="20" y1="6" y2="6" />
+        <line x1="4" x2="20" y1="18" y2="18" />
+      </IconBase>
+    );
+
+    const X = (props) => (
+      <IconBase {...props}>
+        <path d="M18 6 6 18" />
+        <path d="m6 6 12 12" />
+      </IconBase>
+    );
+
+    const ChevronRight = (props) => (
+      <IconBase {...props}>
+        <path d="m9 18 6-6-6-6" />
+      </IconBase>
+    );
+
+    const ChevronDown = (props) => (
+      <IconBase {...props}>
+        <path d="m6 9 6 6 6-6" />
+      </IconBase>
+    );
+
+    const Award = (props) => (
+      <IconBase {...props}>
+        <circle cx="12" cy="8" r="7" />
+        <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
+      </IconBase>
+    );
+
+    const ArrowRight = (props) => (
+      <IconBase {...props}>
+        <path d="M5 12h14" />
+        <path d="m12 5 7 7-7 7" />
+      </IconBase>
+    );
+
+    const MapPin = (props) => (
+      <IconBase {...props}>
+        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+        <circle cx="12" cy="10" r="3" />
+      </IconBase>
+    );
+    
+    const Monitor = (props) => (
+      <IconBase {...props}>
+        <rect width="20" height="14" x="2" y="3" rx="2" />
+        <line x1="8" x2="16" y1="21" y2="21" />
+        <line x1="12" x2="12" y1="17" y2="21" />
+      </IconBase>
+    );
+
+    /* --- DATA --- */
+    const SERVICES_DATA = [
+      {
+        title: "Pre-Design Analysis",
+        icon: <Sun size={32} />,
+        description: "We optimize the building envelope and layout before a single brick is laid, ensuring maximum efficiency.",
+        points: [
+          "Sustainable Architecture Consultation",
+          "Envelope & Façade Analysis",
+          "Thermal Gain Analysis",
+          "Natural Ventilation Strategies",
+          "Daylighting Optimization",
+          "Urban Microclimate Analysis"
+        ]
+      },
+      {
+        title: "Post-Design Analysis",
+        icon: <BarChart size={32} />,
+        description: "For existing structures, we audit performance and implement retrofitting solutions to reduce carbon footprints.",
+        points: [
+          "Indoor Environmental Quality (IEQ)",
+          "Detailed Energy Auditing",
+          "Post-Occupancy Evaluation (POE)",
+          "Retrofitting Solutions",
+          "Building Performance Audits"
+        ]
+      },
+      {
+        title: "Research & Training",
+        icon: <BookOpen size={32} />,
+        description: "Our dedicated wing for empowering professionals and driving innovation in the construction industry.",
+        points: [
+          "Sustainable Design Workshops",
+          "Energy Efficiency Training",
+          "Innovative Building Techniques",
+          "Industry-Academia Collaboration",
+          "Green Certification Guidance (LEED/GRIHA)"
+        ]
+      }
+    ];
+    
+    // UPDATED TOOLS DATA
+    const TOOLS_DATA = [
+      {
+        title: "Climate Analyser",
+        desc: "Analyze climate data to optimize building design strategies.",
+        link: "https://asbee.in/Climate-Analyser", 
+        icon: <Sun size={32} />
+      },
+      {
+        title: "Shading Device Tool",
+        desc: "Design and evaluate shading devices for optimal solar control.",
+        link: "https://asbee.in/Shading-Device-Tool",
+        icon: <Wind size={32} />
+      },
+      {
+        title: "Green Material Database",
+        desc: "Access our curated list of sustainable building materials and their embodied carbon values.",
+        link: "#",
+        icon: <Leaf size={32} />
+      }
+    ];
+    
+    const ARTICLES_DATA = [
+      {
+        title: "Optimizing Urban Microclimates",
+        excerpt: "How strategic design and material selection can mitigate urban heat islands and improve outdoor thermal comfort for communities.",
+        category: "Research",
+        icon: <Sun size={48} />
+      },
+      {
+        title: "The Importance of Daylighting Analysis",
+        excerpt: "Exploring the balance between natural light maximization and thermal gain control to enhance occupant well-being.",
+        category: "Design",
+        icon: <Wind size={48} />
+      },
+      {
+        title: "Retrofitting: Breathing New Life into Old Buildings",
+        excerpt: "Strategies for upgrading existing structures to meet modern energy efficiency standards without compromising their heritage.",
+        category: "Innovation",
+        icon: <BarChart size={48} />
+      }
+    ];
+
+    /* --- COMPONENTS --- */
+
+    const Navbar = () => {
+      const [isOpen, setIsOpen] = useState(false);
+
+      return (
+        <nav className="navbar">
+          <div className="container">
+            <a href="#" className="logo">
+              {/* Logo Placeholder */}
+              <img 
+                src="logo.jpeg" 
+                alt="ASBEE Logo" 
+                onError={(e) => {
+                  e.target.style.display = 'none'; 
+                  e.target.nextSibling.style.display = 'block';
+                }}
+              />
+              <Leaf className="logo-icon" size={28} style={{display: 'none'}} />
+            </a>
+            
+            <button 
+              className="mobile-menu-btn"
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label="Toggle Menu"
+            >
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+
+            <ul className={`nav-links ${isOpen ? 'open' : ''}`}>
+              <li><a href="#home" className="nav-item" onClick={() => setIsOpen(false)}>Home</a></li>
+              <li><a href="#about" className="nav-item" onClick={() => setIsOpen(false)}>About</a></li>
+              <li><a href="#services" className="nav-item" onClick={() => setIsOpen(false)}>Services</a></li>
+              
+              {/* Dropdown for Tools */}
+              <li className="nav-item dropdown-container">
+                 <div className="dropdown-trigger">
+                   Tools <ChevronDown size={14} />
+                 </div>
+                 <div className="dropdown-menu">
+                   <a href="https://asbee.in/Climate-Analyser" className="dropdown-item">Climate Analyser</a>
+                   <a href="https://asbee.in/Shading-Device-Tool" className="dropdown-item">Shading Device Tool</a>
+                   <a href="#tools" className="dropdown-item" onClick={() => setIsOpen(false)}>All Tools</a>
+                 </div>
+              </li>
+
+              <li><a href="#articles" className="nav-item" onClick={() => setIsOpen(false)}>Articles</a></li>
+              <li><a href="#contact" className="nav-item" onClick={() => setIsOpen(false)}>Contact</a></li>
+            </ul>
+          </div>
+        </nav>
+      );
+    };
+
+    const Hero = () => (
+      <section id="home" className="hero">
+        <div className="container hero-content">
+          <span className="section-tag">A Responsible Future Together</span>
+          <h1 className="hero-title">Advocates for Sustainable Built Environment and Energy Efficiency</h1>
+          <p className="hero-subtitle">
+            We integrate energy efficiency and climate-responsive design strategies to transform the construction industry for a greener tomorrow.
+          </p>
+          <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <a href="#services" className="btn btn-primary">
+              Our Services <ArrowRight size={18} />
+            </a>
+            <a href="#contact" className="btn btn-outline">
+              Get in Touch
+            </a>
+          </div>
+        </div>
+      </section>
+    );
+
+    const About = () => (
+      <section id="about" className="section-padding">
+        <div className="container">
+          <div className="section-header">
+            <span className="section-tag">About Us</span>
+            <h2 className="section-title">Who We Are</h2>
+          </div>
+
+          <div className="about-grid">
+            <div className="about-text">
+              <p>
+                <strong>ASBEE</strong> (Advocates for Sustainable Built Environment and Energy Efficiency) is a specialized startup founded by a dedicated team of architects.
+              </p>
+              <p>
+                We are committed to advancing sustainability in the built environment by focusing on energy conservation, thermal comfort, and low-carbon solutions for buildings and communities.
+              </p>
+              <p>
+                Beyond consultation, we offer a dedicated training and research wing to empower professionals and the general public with the knowledge needed to contribute to a sustainable future.
+              </p>
+            </div>
+
+            <div className="cards-container">
+              <div className="feature-card">
+                <h3><Award className="logo-icon" size={24} /> Our Vision</h3>
+                <p>To lead the transformation toward a sustainable built environment by integrating energy efficiency and climate-responsive design strategies across the construction industry.</p>
+              </div>
+              <div className="feature-card">
+                <h3><Wind className="logo-icon" size={24} /> Our Mission</h3>
+                <p>To empower architects, developers, and owners to design and operate structures that minimize environmental impact while maximizing occupant comfort.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+
+    const Services = () => (
+      <section id="services" className="section-padding services-bg">
+        <div className="container">
+          <div className="section-header">
+            <span className="section-tag">What We Do</span>
+            <h2 className="section-title">Comprehensive Solutions</h2>
+            <p className="section-desc">From pre-design concepts to post-occupancy audits, we cover the entire lifecycle of sustainable building.</p>
+          </div>
+
+          <div className="services-grid">
+            {SERVICES_DATA.map((service, index) => (
+              <div className="service-card" key={index}>
+                <div className="icon-wrapper">
+                  {service.icon}
+                </div>
+                <h3>{service.title}</h3>
+                <p>{service.description}</p>
+                <ul className="service-list">
+                  {service.points.map((point, idx) => (
+                    <li key={idx}>
+                      <ChevronRight size={16} className="check-icon" />
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+    
+    // NEW Tools Component
+    const Tools = () => (
+      <section id="tools" className="section-padding">
+        <div className="container">
+          <div className="section-header">
+            <span className="section-tag">Web Tools</span>
+            <h2 className="section-title">Our Digital Applications</h2>
+            <p className="section-desc">Explore our suite of online tools designed to assist in sustainable analysis and decision-making.</p>
+          </div>
+
+          <div className="tools-grid">
+            {TOOLS_DATA.map((tool, index) => (
+              <div className="tool-card" key={index}>
+                <div className="tool-icon">
+                  {tool.icon}
+                </div>
+                <h3 className="tool-title">{tool.title}</h3>
+                <p className="tool-desc">{tool.desc}</p>
+                <a href={tool.link} className="btn btn-outline" style={{padding: '8px 24px', fontSize: '0.9rem'}}>
+                  Launch Tool <ArrowRight size={16} style={{marginLeft: '5px'}}/>
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+    
+    const Articles = () => (
+      <section id="articles" className="section-padding articles-bg">
+        <div className="container">
+          <div className="section-header">
+            <span className="section-tag">Research & Innovations</span>
+            <h2 className="section-title">Latest Insights</h2>
+            <p className="section-desc">Exploring cutting-edge solutions in sustainable architecture and urban planning.</p>
+          </div>
+          
+          <div className="articles-grid">
+            {ARTICLES_DATA.map((article, index) => (
+              <div className="article-card" key={index}>
+                <div className="article-image">
+                  {article.icon}
+                </div>
+                <div className="article-content">
+                  <span className="article-tag">{article.category}</span>
+                  <h3 className="article-title">{article.title}</h3>
+                  <p className="article-excerpt">{article.excerpt}</p>
+                  <a href={article.link || "#"} target="_blank" className="article-link">
+                    Read Article <ArrowRight size={16} />
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+
+    const Footer = () => (
+      <footer id="contact" className="footer">
+        <div className="container">
+          <div className="footer-grid">
+            <div>
+              <a href="#" className="footer-logo">
+                <img 
+                  src="logo.jpeg" 
+                  alt="ASBEE Logo"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'block';
+                  }}
+                />
+                <Leaf style={{ display: 'none', marginRight: '8px' }} />
+              </a>
+              <p style={{ maxWidth: '300px', lineHeight: '1.6' }}>
+                Advocates for Sustainable Built Environment and Energy Efficiency.
+              </p>
+            </div>
+
+            <div>
+              <h4 className="footer-heading">Quick Links</h4>
+              <ul className="footer-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#tools">Tools</a></li>
+                <li><a href="#articles">Articles</a></li>
+                <li><a href="#contact">Contact</a></li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="footer-heading">Contact Us</h4>
+              <div className="contact-item">
+                <Mail size={18} />
+                <a href="mailto:info@asbee.in">info@asbee.in</a>
+              </div>
+              <div className="contact-item">
+                <Globe size={18} />
+                <a href="https://www.asbee.in" target="_blank" rel="noreferrer">www.asbee.in</a>
+              </div>
+              <div className="contact-item" style={{ alignItems: 'flex-start' }}>
+                <MapPin size={18} style={{ marginTop: '4px' }}/>
+                <span>India</span>
+              </div>
+            </div>
+          </div>
+          
+          <div className="copyright">
+            &copy; {new Date().getFullYear()} ASBEE. All rights reserved.
+          </div>
+        </div>
+      </footer>
+    );
+
+    const App = () => {
+      return (
+        <div className="app-wrapper">
+          <Navbar />
+          <Hero />
+          <About />
+          <Services />
+          <Tools />
+          <Articles />
+          <Footer />
+        </div>
+      );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
